@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5434/subscrybe_pro
+      - SPRING_DATASOURCE_USERNAME=admin_pro
+      - SPRING_DATASOURCE_PASSWORD=root123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      # Usamos el 5434 en tu máquina para esquivar cualquier fantasma del 5432 o 5433
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=subscrybe_pro
+      - POSTGRES_USER=admin_pro
+      - POSTGRES_PASSWORD=root123
+    volumes:
+      # Un disco duro virtual completamente virgen
+      - subscrybe_pro_data:/var/lib/postgresql/data
+
+volumes:
+  subscrybe_pro_data:

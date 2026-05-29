@@ -2,20 +2,14 @@ package com.subscrybe.infrastructure.config;
 
 import com.subscrybe.application.ports.out.*;
 import com.subscrybe.application.usecases.AddSubscriptionUseCase;
+import com.subscrybe.application.usecases.AnalyzeSubscriptionUseCase;
+import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
+import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
 import com.subscrybe.application.usecases.LoginUserUseCase;
 import com.subscrybe.application.usecases.RegisterUserUseCase;
 import com.subscrybe.application.usecases.SyncSubscriptionsFromEmailUseCase;
-// 👇 Importamos los nuevos Casos de Uso
-import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
-import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
-
-import com.subscrybe.infrastructure.adapters.out.email.GmailApiScannerAdapter;
-import com.subscrybe.application.ports.out.IUserRepository;
-import com.subscrybe.application.ports.out.ISubscriptionRepository;
-import com.subscrybe.application.usecases.AddSubscriptionUseCase;
-import com.subscrybe.application.usecases.AnalyzeSubscriptionUseCase;
-import com.subscrybe.application.usecases.RegisterUserUseCase;
 import com.subscrybe.domain.services.FinancialAnalyzer;
+import com.subscrybe.infrastructure.adapters.out.email.GmailApiScannerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -63,6 +57,8 @@ public class UseCaseConfig {
             GmailApiScannerAdapter gmailScannerAdapter,
             ISubscriptionRepository repo) {
         return new SyncSubscriptionsFromEmailUseCase(gmailScannerAdapter, repo);
+    }
+
     @Bean
     public AnalyzeSubscriptionUseCase analyzeSubscriptionUseCase(ISubscriptionRepository subscriptionRepository) {
         return new AnalyzeSubscriptionUseCase(subscriptionRepository, new FinancialAnalyzer());

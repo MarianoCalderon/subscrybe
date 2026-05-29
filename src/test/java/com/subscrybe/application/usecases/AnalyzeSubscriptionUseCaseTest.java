@@ -28,6 +28,12 @@ class AnalyzeSubscriptionUseCaseTest {
         public Subscription findByName(String name) {
             return stored != null && stored.getName().equals(name) ? stored : null;
         }
+        @Override
+        public java.util.List<Subscription> findByUserEmail(String email) {
+            return java.util.List.of();
+        }
+        @Override
+        public void deleteById(Long id) {}
     }
 
     @Test

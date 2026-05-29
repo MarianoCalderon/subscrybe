@@ -60,7 +60,6 @@ public class SubscriptionRepositoryAdapter implements ISubscriptionRepository {
                             Cycle.valueOf(entity.getBillingCycle()),
                             entity.getStartDate()
                     );
-                    // 👇 2. EL PASO CLAVE: Pasamos el ID de la BD a tu Dominio
                     sub.setId(entity.getId());
                     return sub;
                 })

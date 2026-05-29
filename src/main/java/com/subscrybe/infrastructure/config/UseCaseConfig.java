@@ -40,6 +40,7 @@ public class UseCaseConfig {
     public ProcessPaymentUseCase processPaymentUseCase(IPaymentGateway paymentGateway, ISubscriptionRepository subscriptionRepository) {
         // Retornamos el caso de uso puro de dominio, inyectándole las dependencias técnicas
         return new ProcessPaymentUseCase(paymentGateway, subscriptionRepository);
+    }
     // 👇 NUEVO BEAN: Para listar las suscripciones en tu tablero
     @Bean
     public GetSubscriptionsUseCase getSubscriptionsUseCase(ISubscriptionRepository subscriptionRepository) {
@@ -54,10 +55,7 @@ public class UseCaseConfig {
 
     // --- EL NUEVO AJUSTE: El Bean para el Login ---
     @Bean
-    public LoginUserUseCase loginUserUseCase(
-            IUserRepository userRepository,
-            IPasswordHasher passwordHasher,
-            ITokenGenerator tokenGenerator) {
+    public LoginUserUseCase loginUserUseCase(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenGenerator tokenGenerator) {
         return new LoginUserUseCase(userRepository, passwordHasher, tokenGenerator);
     }
 

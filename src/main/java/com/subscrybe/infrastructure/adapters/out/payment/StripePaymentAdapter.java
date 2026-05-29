@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 public class StripePaymentAdapter implements IPaymentGateway {
     @Override
     public boolean charge(String userEmail, double amount, String description) {
-        // Simulación de llamadas a API de Stripe
         System.out.println("=== INICIANDO TRANSACCIÓN CON STRIPE ===");
         System.out.println("Cobrando a: " + userEmail);
         System.out.println("Monto: $" + amount);

@@ -10,7 +10,6 @@ public class PaymentController {
 
     private final ProcessPaymentUseCase processPaymentUseCase;
 
-    // Spring will automatically inject the UseCase you defined in UseCaseConfig
     public PaymentController(ProcessPaymentUseCase processPaymentUseCase) {
         this.processPaymentUseCase = processPaymentUseCase;
     }
@@ -20,7 +19,7 @@ public class PaymentController {
             @RequestParam String userEmail,
             @RequestParam String subscriptionName) {
         try {
-            // The controller delegates the actual work to the Use Case
+            // Controller delegating work to use case
             boolean isSuccessful = processPaymentUseCase.execute(userEmail, subscriptionName);
 
             if (isSuccessful) {

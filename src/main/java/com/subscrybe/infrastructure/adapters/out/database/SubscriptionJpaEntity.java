@@ -24,19 +24,30 @@ public class SubscriptionJpaEntity {
     @Column(nullable = false)
     private LocalDate startDate;
 
+    // 👇 --- EL CAMPO NUEVO QUE SPRING DATA NECESITA --- 👇
+    @Column(nullable = false)
+    private String userEmail;
+
     // Constructor vacío para JPA
     public SubscriptionJpaEntity() {}
 
-    public SubscriptionJpaEntity(String name, double cost, String billingCycle, LocalDate startDate) {
+    // Actualizamos el constructor para incluir el correo
+    public SubscriptionJpaEntity(String name, double cost, String billingCycle, LocalDate startDate, String userEmail) {
         this.name = name;
         this.cost = cost;
         this.billingCycle = billingCycle;
         this.startDate = startDate;
+        this.userEmail = userEmail;
     }
 
-    // Getters para el Adaptador
+    // Getters
+    public Long getId() { return id; }
     public String getName() { return name; }
     public double getCost() { return cost; }
     public String getBillingCycle() { return billingCycle; }
     public LocalDate getStartDate() { return startDate; }
+
+    // 👇 --- GETTER Y SETTER DEL NUEVO CAMPO --- 👇
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 }

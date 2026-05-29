@@ -35,6 +35,12 @@ class ProcessPaymentUseCaseTest {
         public Subscription findByName(String name) {
             return new Subscription(name, 129.0, Cycle.MONTHLY, LocalDate.now());
         }
+        @Override
+        public java.util.List<Subscription> findByUserEmail(String email) {
+            return java.util.List.of();
+        }
+        @Override
+        public void deleteById(Long id) {}
     }
 
     @Test

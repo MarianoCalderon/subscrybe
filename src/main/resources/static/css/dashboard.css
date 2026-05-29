@@ -1,0 +1,133 @@
+:root {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --card: #f5f6fb;
+  --accent: #4361ee;
+  --good: #16a34a;
+  --warn: #d97706;
+  --error: #dc2626;
+  --text: #1d2333;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.topbar {
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+.topbar h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.3px; color: var(--accent); }
+.topbar p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  align-items: start;
+  background: #f9fafb;
+}
+@media (max-width: 820px) {
+  .dashboard { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+/* La gráfica ocupa todo el ancho debajo de las dos columnas */
+.panel-wide { grid-column: 1 / -1; }
+.panel h2 { margin: 0 0 1rem; font-size: 1.1rem; }
+
+/* Análisis financiero */
+.analysis-grid { display: grid; gap: 0.85rem; }
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+}
+.metric-label { color: var(--muted); font-size: 0.85rem; }
+.metric-value { font-size: 1.2rem; font-weight: 700; }
+.metric-value.good { color: var(--good); }
+.metric-value.warn { color: var(--warn); }
+
+/* Próximos pagos */
+.payments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.payment-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.payment-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.payment-head h3 { margin: 0; font-size: 1.05rem; }
+.payment-meta { color: var(--muted); font-size: 0.82rem; margin: 0.5rem 0 0.9rem; }
+.payment-foot { display: flex; justify-content: space-between; align-items: center; }
+.amount { font-size: 1.15rem; font-weight: 700; }
+
+.tag {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.tag-keep { background: rgba(22, 163, 74, 0.12); color: var(--good); }
+.tag-cancel { background: rgba(220, 38, 38, 0.12); color: var(--error); }
+
+.pay-btn {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.pay-btn:hover:not(:disabled) { filter: brightness(1.08); }
+.pay-btn:disabled { opacity: 0.55; cursor: default; }
+
+.pay-feedback { font-size: 0.8rem; margin: 0.6rem 0 0; min-height: 1em; }
+.pay-feedback.ok { color: var(--good); }
+.pay-feedback.error { color: var(--error); }
+
+.status { color: var(--muted); font-size: 0.9rem; }
+.status.error { color: var(--error); }
+
+/* Gráfica de barras (SVG) */
+.chart-wrap { width: 100%; overflow-x: auto; }
+.bar-chart { width: 100%; max-width: 720px; height: auto; }
+.bar-chart .bar { fill: var(--accent); }
+.bar-chart .bar:hover { fill: #2f4bd6; }
+.bar-chart .axis { stroke: var(--border); stroke-width: 1.5; }
+.bar-chart .bar-value { fill: var(--text); font-size: 12px; font-weight: 700; }
+.bar-chart .bar-label { fill: var(--muted); font-size: 12px; }
+
+.footer { padding: 1rem 2rem 2rem; color: var(--muted); background: #f9fafb; }
+.footer code { color: var(--accent); }

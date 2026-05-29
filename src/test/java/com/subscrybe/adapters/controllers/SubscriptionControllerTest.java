@@ -2,6 +2,8 @@ package com.subscrybe.adapters.controllers;
 
 import com.subscrybe.application.ports.out.ISubscriptionRepository;
 import com.subscrybe.application.usecases.AddSubscriptionUseCase;
+import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
+import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
 import com.subscrybe.domain.entities.Subscription;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,12 @@ class SubscriptionControllerTest {
         public Subscription findByName(String name) {
             return null;
         }
+        @Override
+        public java.util.List<Subscription> findByUserEmail(String email) {
+            return java.util.List.of();
+        }
+        @Override
+        public void deleteById(Long id) {}
     }
 
     @Test
@@ -27,7 +35,9 @@ class SubscriptionControllerTest {
         // Arrange: Armamos el rompecabezas de dependencias (DI)
         FakeRepository fakeRepo = new FakeRepository();
         AddSubscriptionUseCase useCase = new AddSubscriptionUseCase(fakeRepo);
-        SubscriptionController controller = new SubscriptionController(useCase);
+        GetSubscriptionsUseCase getUseCase = new GetSubscriptionsUseCase(fakeRepo);
+        DeleteSubscriptionUseCase deleteUseCase = new DeleteSubscriptionUseCase(fakeRepo);
+        SubscriptionController controller = new SubscriptionController(useCase, getUseCase, deleteUseCase);
 
         // Act: Simulamos la petición del usuario. ¡Ahora recibimos un ResponseEntity!
         ResponseEntity<String> response = controller.addSubscription("Netflix", 250.0, "MONTHLY", "2026-05-26");

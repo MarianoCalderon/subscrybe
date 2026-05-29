@@ -34,3 +34,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Secretos / OAuth (NUNCA versionar) ###
+src/main/resources/credentials.json
+tokens/

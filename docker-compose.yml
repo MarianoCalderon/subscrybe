@@ -12,6 +12,11 @@ services:
       - SPRING_DATASOURCE_USERNAME=admin_pro
       - SPRING_DATASOURCE_PASSWORD=root123
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    # Le "prestamos" al contenedor el token de Gmail generado en local (ver
+    # paso de autorización). Asi el escaneo de Gmail funciona DENTRO de Docker
+    # sin necesitar navegador, porque reusa el token cacheado.
+    volumes:
+      - ./tokens:/app/tokens
 
   db:
     image: postgres:15-alpine

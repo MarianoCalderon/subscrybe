@@ -4,19 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Subscrybe · Tablero</title>
-    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/dashboard.css?v=3" />
   </head>
   <body>
     <!--
-      CAPA DE PRESENTACIÓN (estructura).
+      PANTALLA DE LOGIN (se muestra primero). Usa los endpoints reales
+      /api/auth/login y /api/users/register. Al entrar, se oculta y se
+      revela #app-root. Lógica en js/presentation/LoginView.js.
+    -->
+    <div id="login-overlay" class="login-overlay">
+      <form id="login-form" class="login-card" autocomplete="on">
+        <h1 class="login-brand">Subscrybe</h1>
+        <h2 id="login-title">Iniciar sesión</h2>
+
+        <label id="login-name-row" class="login-field">
+          <span>Nombre</span>
+          <input id="login-name" type="text" placeholder="Tu nombre" />
+        </label>
+
+        <label class="login-field">
+          <span>Correo</span>
+          <input id="login-email" type="email" placeholder="tucorreo@gmail.com" required />
+        </label>
+
+        <label class="login-field">
+          <span>Contraseña</span>
+          <input id="login-password" type="password" placeholder="••••••••" required />
+        </label>
+
+        <button id="login-submit" type="submit" class="login-btn">Entrar</button>
+        <p id="login-feedback" class="login-feedback"></p>
+        <button id="login-toggle" type="button" class="login-link">
+          ¿No tienes cuenta? Crear una
+        </button>
+      </form>
+    </div>
+
+    <!--
+      CAPA DE PRESENTACIÓN (estructura). Oculto hasta iniciar sesión.
       El tablero vive en UNA sola pantalla con tres bloques pedidos:
         1) Análisis financiero (#analysis)
         2) Próximos pagos (#payments)  ->  cada tarjeta trae su botón de pago
       Toda la lógica se carga como módulos ES desde main.js (composition root).
     -->
+    <div id="app-root" style="display: none">
     <header class="topbar">
-      <h1>Subscrybe</h1>
-      <p>Tablero de suscripciones · próximos pagos y análisis financiero</p>
+      <div class="topbar-title">
+        <h1>Subscrybe</h1>
+        <p>Tablero de suscripciones · próximos pagos y análisis financiero</p>
+      </div>
+      <div class="session">
+        <div class="session-avatar" id="session-avatar" aria-hidden="true"></div>
+        <div class="session-info">
+          <span class="session-name" id="session-name"></span>
+          <span class="session-email" id="session-email"></span>
+        </div>
+        <button id="logout-btn" class="logout-btn" type="button">Cerrar sesión</button>
+      </div>
     </header>
 
     <main class="dashboard">
@@ -27,28 +71,33 @@
         </div>
       </section>
 
-      <section class="panel" aria-labelledby="payments-title">
-        <h2 id="payments-title">Próximos pagos</h2>
-        <p id="status" class="status"></p>
-        <div id="payments" class="payments-grid">
-          <!-- Inyectado por DashboardView -->
-        </div>
-      </section>
+      <!-- Columna derecha: Próximos pagos arriba y la gráfica justo debajo
+           (zona verde de la maqueta), apiladas verticalmente. -->
+      <div class="main-col">
+        <section class="panel" aria-labelledby="payments-title">
+          <h2 id="payments-title">Próximos pagos</h2>
+          <p id="status" class="status"></p>
+          <div id="payments" class="payments-grid">
+            <!-- Inyectado por DashboardView -->
+          </div>
+        </section>
 
-      <section class="panel panel-wide" aria-labelledby="chart-title">
-        <h2 id="chart-title">Distribución del gasto mensual</h2>
-        <div id="chart" class="chart-wrap">
-          <!-- Gráfica SVG inyectada por DashboardView -->
-        </div>
-      </section>
+        <section class="panel" aria-labelledby="chart-title">
+          <h2 id="chart-title">Distribución del gasto mensual</h2>
+          <div id="chart" class="chart-wrap">
+            <!-- Gráfica SVG inyectada por DashboardView -->
+          </div>
+        </section>
+      </div>
     </main>
 
     <footer class="footer">
-      <small>Datos simulados (mock). El adaptador HTTP real está listo en
-        <code>js/infrastructure/HttpSubscriptionGateway.js</code>.</small>
+      <small>Datos reales vía API (<code>js/infrastructure/HttpSubscriptionGateway.js</code>).
+        El análisis de uso es neutral porque el backend aún no persiste <code>daysUsedPerWeek</code>.</small>
     </footer>
+    </div>
 
     <!-- type="module" habilita import/export ES sin build step -->
-    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/main.js?v=3"></script>
   </body>
 </html>

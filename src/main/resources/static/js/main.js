@@ -15,13 +15,13 @@
  *     HttpSubscriptionGateway. Nada más cambia en todo el proyecto.
  */
 
-import { FinancialAnalyzer } from "./domain/FinancialAnalyzer.js?v=3";
-import { DashboardService } from "./application/DashboardService.js?v=3";
+import { FinancialAnalyzer } from "./domain/FinancialAnalyzer.js?v=6";
+import { DashboardService } from "./application/DashboardService.js?v=6";
 // import { MockSubscriptionGateway } from "./infrastructure/MockSubscriptionGateway.js";
-import { HttpSubscriptionGateway } from "./infrastructure/HttpSubscriptionGateway.js?v=3";
-import { HttpAuthGateway } from "./infrastructure/HttpAuthGateway.js?v=3";
-import { DashboardView } from "./presentation/DashboardView.js?v=3";
-import { LoginView } from "./presentation/LoginView.js?v=3";
+import { HttpSubscriptionGateway } from "./infrastructure/HttpSubscriptionGateway.js?v=6";
+import { HttpAuthGateway } from "./infrastructure/HttpAuthGateway.js?v=6";
+import { DashboardView } from "./presentation/DashboardView.js?v=6";
+import { LoginView } from "./presentation/LoginView.js?v=6";
 
 const BASE_URL = "http://localhost:8081";
 

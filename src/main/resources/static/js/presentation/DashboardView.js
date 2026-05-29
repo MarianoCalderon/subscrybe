@@ -24,6 +24,12 @@ export class DashboardView {
   }
 
   async init() {
+    this._bindToolbar(); // botones de Gmail / agregar (se enlazan una sola vez)
+    await this.reload();
+  }
+
+  /** Carga datos del backend y repinta el tablero. Reutilizable tras cambios. */
+  async reload() {
     this._setStatus("Cargando tablero…");
     try {
       const { upcomingPayments, analysis } = await this.service.loadDashboard(new Date());
@@ -34,6 +40,82 @@ export class DashboardView {
     } catch (err) {
       this._setStatus(`No se pudo cargar el tablero: ${err.message}`, true);
     }
+  }
+
+  /** Enlaza la barra de acciones: escanear Gmail y agregar suscripción. */
+  _bindToolbar() {
+    const scanBtn = this.doc.getElementById("scan-btn");
+    if (scanBtn) scanBtn.addEventListener("click", () => this._onScan(scanBtn));
+
+    const addForm = this.doc.getElementById("add-form");
+    if (addForm) addForm.addEventListener("submit", (e) => this._onAdd(e));
+  }
+
+  async _onScan(button) {
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = "Escaneando…";
+    this._setToolMsg("Conectando con tu correo y buscando suscripciones…");
+    try {
+      const result = await this.service.syncEmail();
+      this._setToolMsg(result.message || "Escaneo terminado.", !result.success);
+      if (result.success) await this.reload();
+    } catch (err) {
+      this._setToolMsg(`Error al escanear: ${err.message}`, true);
+    } finally {
+      button.disabled = false;
+      button.textContent = original;
+    }
+  }
+
+  async _onAdd(e) {
+    e.preventDefault();
+    const name = this.doc.getElementById("add-name").value.trim();
+    const cost = this.doc.getElementById("add-cost").value;
+    const cycle = this.doc.getElementById("add-cycle").value;
+    const startDate = this.doc.getElementById("add-date").value;
+
+    this._setToolMsg("Guardando suscripción…");
+    try {
+      const result = await this.service.add(name, Number(cost), cycle, startDate);
+      this._setToolMsg(result.message || "Suscripción agregada.", !result.success);
+      if (result.success) {
+        e.target.reset();
+        await this.reload();
+      }
+    } catch (err) {
+      this._setToolMsg(`Error al agregar: ${err.message}`, true);
+    }
+  }
+
+  async _onCancel(button) {
+    const id = button.dataset.id;
+    const name = button.dataset.name;
+    if (!id) {
+      this._setToolMsg(`No se puede cancelar "${name}": falta el identificador.`, true);
+      return;
+    }
+    if (!confirm(`¿Cancelar la suscripción "${name}"? Se eliminará del tablero.`)) return;
+
+    button.disabled = true;
+    button.textContent = "Cancelando…";
+    try {
+      const result = await this.service.cancel(id);
+      this._setToolMsg(result.message || "Suscripción cancelada.", !result.success);
+      if (result.success) await this.reload();
+      else { button.disabled = false; button.textContent = "Cancelar"; }
+    } catch (err) {
+      this._setToolMsg(`Error al cancelar: ${err.message}`, true);
+      button.disabled = false;
+      button.textContent = "Cancelar";
+    }
+  }
+
+  _setToolMsg(text, isError = false) {
+    const el = this.doc.getElementById("tool-msg");
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle("error", isError);
   }
 
   _renderAnalysis(a) {
@@ -66,7 +148,7 @@ export class DashboardView {
       const card = this.doc.createElement("article");
       card.className = "payment-card";
       const recoClass = p.recommendation === "CANCEL" ? "tag-cancel" : "tag-keep";
-      const recoText = p.recommendation === "CANCEL" ? "Cancelar" : "Mantener";
+      const recoText = p.recommendation === "CANCEL" ? "Poco usada" : "Mantener";
 
       card.innerHTML = `
         <div class="payment-head">
@@ -80,13 +162,19 @@ export class DashboardView {
         </p>
         <div class="payment-foot">
           <span class="amount">${this._money(p.cost)}</span>
-          <button class="pay-btn" data-name="${p.name}">Pagar ahora</button>
+          <div class="card-actions">
+            <button class="cancel-btn" data-id="${p.id ?? ""}" data-name="${p.name}">Cancelar</button>
+            <button class="pay-btn" data-name="${p.name}">Pagar ahora</button>
+          </div>
         </div>
         <p class="pay-feedback" data-feedback="${p.name}"></p>
       `;
 
       card.querySelector(".pay-btn").addEventListener("click", (e) =>
         this._onPay(e.currentTarget)
+      );
+      card.querySelector(".cancel-btn").addEventListener("click", (e) =>
+        this._onCancel(e.currentTarget)
       );
       list.appendChild(card);
     });

@@ -29,8 +29,8 @@
  *    formatos de transporte. El detalle técnico queda confinado al borde.
  */
 
-import { ISubscriptionGateway } from "../application/ISubscriptionGateway.js";
-import { Subscription, Cycle } from "../domain/Subscription.js";
+import { ISubscriptionGateway } from "../application/ISubscriptionGateway.js?v=6";
+import { Subscription, Cycle } from "../domain/Subscription.js?v=6";
 
 export class HttpSubscriptionGateway extends ISubscriptionGateway {
   /**
@@ -68,7 +68,8 @@ export class HttpSubscriptionGateway extends ISubscriptionGateway {
           r.billingCycle === "ANNUAL" ? Cycle.ANNUAL : Cycle.MONTHLY,
           new Date(r.startDate + "T00:00:00"),
           // Ver "DESFASE CONOCIDO" arriba: el backend no entrega este dato.
-          r.daysUsedPerWeek ?? 0
+          r.daysUsedPerWeek ?? 0,
+          r.id ?? null // id real del backend, necesario para cancelar
         )
     );
   }
@@ -80,6 +81,35 @@ export class HttpSubscriptionGateway extends ISubscriptionGateway {
       subscriptionName,
     });
     const res = await fetch(`${this.baseUrl}/api/payments/process?${params}`, {
+      method: "POST",
+    });
+    const message = await res.text();
+    return { success: res.ok, message };
+  }
+
+  /** Cancela/elimina una suscripción -> DELETE /api/subscriptions/{id} */
+  async deleteSubscription(id) {
+    const res = await fetch(`${this.baseUrl}/api/subscriptions/${id}`, {
+      method: "DELETE",
+    });
+    const message = await res.text();
+    return { success: res.ok, message };
+  }
+
+  /** Agrega una suscripción -> POST /api/subscriptions/add?name=&cost=&cycle=&startDate= */
+  async addSubscription(name, cost, cycle, startDate) {
+    const params = new URLSearchParams({ name, cost, cycle, startDate });
+    const res = await fetch(`${this.baseUrl}/api/subscriptions/add?${params}`, {
+      method: "POST",
+    });
+    const message = await res.text();
+    return { success: res.ok, message };
+  }
+
+  /** Escanea el correo del usuario -> POST /api/emails/sync?email= */
+  async syncFromEmail() {
+    const params = new URLSearchParams({ email: this.userEmail });
+    const res = await fetch(`${this.baseUrl}/api/emails/sync?${params}`, {
       method: "POST",
     });
     const message = await res.text();

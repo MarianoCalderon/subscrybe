@@ -26,13 +26,15 @@ export class Subscription {
    * @param {"MONTHLY"|"ANNUAL"} billingCycle
    * @param {Date} startDate
    * @param {number} daysUsedPerWeek  Días de uso semanal (insumo del análisis financiero).
+   * @param {number|null} id  Identificador en el backend (necesario para cancelar/eliminar).
    */
-  constructor(name, cost, billingCycle, startDate, daysUsedPerWeek = 0) {
+  constructor(name, cost, billingCycle, startDate, daysUsedPerWeek = 0, id = null) {
     this.name = name;
     this.cost = cost;
     this.billingCycle = billingCycle;
     this.startDate = startDate;
     this.daysUsedPerWeek = daysUsedPerWeek;
+    this.id = id;
   }
 
   /**

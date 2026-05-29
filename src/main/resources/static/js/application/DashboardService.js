@@ -36,6 +36,7 @@ export class DashboardService {
 
     const upcomingPayments = subscriptions
       .map((sub) => ({
+        id: sub.id,
         name: sub.name,
         cost: sub.cost,
         monthlyCost: sub.monthlyCost(),
@@ -62,5 +63,20 @@ export class DashboardService {
    */
   async pay(subscriptionName) {
     return this.gateway.processPayment(subscriptionName);
+  }
+
+  /** Cancela/elimina una suscripción por id (botón "Cancelar"). */
+  async cancel(id) {
+    return this.gateway.deleteSubscription(id);
+  }
+
+  /** Agrega una suscripción manual (formulario "Agregar"). */
+  async add(name, cost, cycle, startDate) {
+    return this.gateway.addSubscription(name, cost, cycle, startDate);
+  }
+
+  /** Escanea el correo del usuario para detectar suscripciones (botón Gmail). */
+  async syncEmail() {
+    return this.gateway.syncFromEmail();
   }
 }

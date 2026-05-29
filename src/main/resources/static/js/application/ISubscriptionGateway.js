@@ -37,4 +37,29 @@ export class ISubscriptionGateway {
   async processPayment(subscriptionName) {
     throw new Error("ISubscriptionGateway.processPayment() no implementado");
   }
+
+  /**
+   * Elimina/cancela una suscripción por su id.
+   * @param {number} id
+   * @returns {Promise<{success: boolean, message: string}>}
+   */
+  async deleteSubscription(id) {
+    throw new Error("ISubscriptionGateway.deleteSubscription() no implementado");
+  }
+
+  /**
+   * Agrega una suscripción manualmente.
+   * @returns {Promise<{success: boolean, message: string}>}
+   */
+  async addSubscription(name, cost, cycle, startDate) {
+    throw new Error("ISubscriptionGateway.addSubscription() no implementado");
+  }
+
+  /**
+   * Dispara el escaneo del correo (Gmail) para detectar suscripciones.
+   * @returns {Promise<{success: boolean, message: string}>}
+   */
+  async syncFromEmail() {
+    throw new Error("ISubscriptionGateway.syncFromEmail() no implementado");
+  }
 }

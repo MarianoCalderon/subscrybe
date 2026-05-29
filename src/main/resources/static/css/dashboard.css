@@ -67,6 +67,47 @@ body {
 }
 .logout-btn:hover { background: #fef2f2; border-color: var(--error); }
 
+/* Barra de acciones (escanear Gmail + agregar suscripción) */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+.add-form { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.add-form input,
+.add-form select {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  outline: none;
+}
+.add-form input:focus,
+.add-form select:focus { border-color: var(--accent); }
+.add-form input[type="text"] { width: 160px; }
+.add-form input[type="number"] { width: 100px; }
+.tool-btn {
+  background: #ffffff;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.tool-btn:hover:not(:disabled) { background: #eef2ff; }
+.tool-btn:disabled { opacity: 0.6; cursor: default; }
+.tool-btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tool-btn-primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--accent); }
+.tool-msg { font-size: 0.83rem; color: var(--muted); }
+.tool-msg.error { color: var(--error); }
+
 .dashboard {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -156,6 +197,20 @@ body {
 }
 .pay-btn:hover:not(:disabled) { filter: brightness(1.08); }
 .pay-btn:disabled { opacity: 0.55; cursor: default; }
+
+.card-actions { display: flex; gap: 0.5rem; align-items: center; }
+.cancel-btn {
+  background: #ffffff;
+  color: var(--error);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.cancel-btn:hover:not(:disabled) { background: #fef2f2; border-color: var(--error); }
+.cancel-btn:disabled { opacity: 0.55; cursor: default; }
 
 .pay-feedback { font-size: 0.8rem; margin: 0.6rem 0 0; min-height: 1em; }
 .pay-feedback.ok { color: var(--good); }

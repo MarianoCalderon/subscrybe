@@ -107,12 +107,12 @@ export class DashboardView {
     }
 
     const max = Math.max(...data.map((d) => d.value), 1);
-    const barW = 64;
-    const gap = 32;
-    const chartH = 200;
-    const topPad = 28;
-    const bottomPad = 44;
-    const sidePad = 20;
+    const barW = 56;
+    const gap = 28;
+    const chartH = 150;
+    const topPad = 26;
+    const bottomPad = 36;
+    const sidePad = 18;
     const width = sidePad * 2 + data.length * barW + (data.length - 1) * gap;
     const height = topPad + chartH + bottomPad;
 
@@ -130,8 +130,12 @@ export class DashboardView {
       })
       .join("");
 
+    // Tamaño FIJO en píxeles (width/height del propio SVG = al viewBox).
+    // Así la gráfica se dibuja a escala 1:1 y nunca se agranda, sin depender
+    // de CSS ni de porcentajes.
     el.innerHTML = `
-      <svg class="bar-chart" viewBox="0 0 ${width} ${height}" role="img"
+      <svg class="bar-chart" width="${width}" height="${height}"
+           viewBox="0 0 ${width} ${height}" role="img"
            aria-label="Gasto mensual por suscripción">
         <line class="axis" x1="${sidePad}" y1="${topPad + chartH}"
               x2="${width - sidePad}" y2="${topPad + chartH}"></line>

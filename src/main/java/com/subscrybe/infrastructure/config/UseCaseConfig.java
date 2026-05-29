@@ -1,16 +1,12 @@
 package com.subscrybe.infrastructure.config;
 
-import com.subscrybe.application.ports.out.IPaymentGateway;
-import com.subscrybe.application.ports.out.IUserRepository;
-import com.subscrybe.application.ports.out.ISubscriptionRepository;
-import com.subscrybe.application.usecases.ProcessPaymentUseCase;
-import com.subscrybe.application.usecases.RegisterUserUseCase;
 import com.subscrybe.application.ports.out.*;
 import com.subscrybe.application.usecases.AddSubscriptionUseCase;
 import com.subscrybe.application.usecases.AnalyzeSubscriptionUseCase;
 import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
 import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
 import com.subscrybe.application.usecases.LoginUserUseCase;
+import com.subscrybe.application.usecases.ProcessPaymentUseCase;
 import com.subscrybe.application.usecases.RegisterUserUseCase;
 import com.subscrybe.application.usecases.SyncSubscriptionsFromEmailUseCase;
 import com.subscrybe.domain.services.FinancialAnalyzer;
@@ -40,6 +36,8 @@ public class UseCaseConfig {
     public ProcessPaymentUseCase processPaymentUseCase(IPaymentGateway paymentGateway, ISubscriptionRepository subscriptionRepository) {
         // Retornamos el caso de uso puro de dominio, inyectándole las dependencias técnicas
         return new ProcessPaymentUseCase(paymentGateway, subscriptionRepository);
+    }
+
     // 👇 NUEVO BEAN: Para listar las suscripciones en tu tablero
     @Bean
     public GetSubscriptionsUseCase getSubscriptionsUseCase(ISubscriptionRepository subscriptionRepository) {

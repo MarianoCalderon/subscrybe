@@ -25,7 +25,7 @@ public class SubscriptionRepositoryAdapter implements ISubscriptionRepository {
                 subscription.getCost(),
                 subscription.getBillingCycle().name(),
                 subscription.getStartDate(),
-                "marianocalderon82@gmail.com" // <-- 1. CORREGIDO AL CORREO REAL
+                "irabien11@gmail.com" // <-- 1. CORREGIDO AL CORREO REAL
         );
         jpaRepository.save(entity);
     }

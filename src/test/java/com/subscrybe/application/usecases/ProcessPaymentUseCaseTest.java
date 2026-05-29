@@ -35,7 +35,6 @@ class ProcessPaymentUseCaseTest {
         public Subscription findByName(String name) {
             return new Subscription(name, 129.0, Cycle.MONTHLY, LocalDate.now());
         }
-
     }
 
     @Test

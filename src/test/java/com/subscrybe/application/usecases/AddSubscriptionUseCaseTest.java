@@ -19,6 +19,12 @@ class AddSubscriptionUseCaseTest {
         public Subscription findByName(String name) {
             return null; // Solo para que compile, ya que estos tests no usan este método
         }
+        @Override
+        public java.util.List<Subscription> findByUserEmail(String email) {
+            return java.util.List.of();
+        }
+        @Override
+        public void deleteById(Long id) {}
     }
 
     @Test

@@ -6,12 +6,14 @@ import java.util.List;
 public class User {
     private String name;
     private String email;
-    // Aquí guardamos la relación entre el usuario y sus suscripciones
+    private String password; // Nuevo campo para la autenticación
     private List<Subscription> subscriptions;
 
-    public User(String name, String email) {
+    // Actualizamos el constructor para requerir la contraseña
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.subscriptions = new ArrayList<>(); // Inicializamos la lista vacía
     }
 
@@ -35,5 +37,9 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

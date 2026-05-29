@@ -5,7 +5,6 @@ import com.subscrybe.application.ports.out.ISubscriptionRepository;
 import com.subscrybe.domain.entities.Subscription;
 
 public class ProcessPaymentUseCase {
-
     private final IPaymentGateway paymentGateway;
     private final ISubscriptionRepository subscriptionRepository;
 

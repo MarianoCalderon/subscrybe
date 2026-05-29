@@ -3,6 +3,8 @@ package com.subscrybe.domain.entities;
 import java.time.LocalDate;
 
 public class Subscription {
+    // 👇 1. Agregamos el ID para identificar la suscripción
+    private Long id;
     private String name;
     private double cost;
     private Cycle billingCycle;
@@ -13,6 +15,15 @@ public class Subscription {
         this.cost = cost;
         this.billingCycle = billingCycle;
         this.startDate = startDate;
+    }
+
+    // 👇 2. Agregamos el Getter y Setter para el ID
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate calculateNextPaymentDate(LocalDate currentDate) {
@@ -35,7 +46,6 @@ public class Subscription {
         return name;
     }
 
-    // ¡Nuevos Getters agregados para que el Adaptador pueda leer la info!
     public Cycle getBillingCycle() {
         return billingCycle;
     }

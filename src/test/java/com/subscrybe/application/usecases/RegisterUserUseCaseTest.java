@@ -1,5 +1,6 @@
 package com.subscrybe.application.usecases;
 
+import com.subscrybe.application.ports.out.IPasswordHasher;
 import com.subscrybe.application.ports.out.IUserRepository;
 import com.subscrybe.domain.entities.User;
 import org.junit.jupiter.api.Test;
@@ -24,9 +25,12 @@ class RegisterUserUseCaseTest {
 
         @Override
         public User findByEmail(String email) {
-            return null; // En los tests, no necesitamos implementar lógica aquí
+            // Para que RegisterUserUseCase lance la excepción, necesita devolver un usuario si ya existe
+            if (simulateEmailExists) {
+                return new User("Dummy", email, "hashed_password");
+            }
+            return null;
         }
-
 
         // Métodos de ayuda solo para el test
         public void setSimulateEmailExists(boolean exists) {
@@ -38,18 +42,32 @@ class RegisterUserUseCaseTest {
         }
     }
 
+    // 2. Creamos nuestro Fake Hasher para simular la encriptación (NUEVO)
+    class FakePasswordHasher implements IPasswordHasher {
+        @Override
+        public String hash(String rawPassword) {
+            return "hashed_" + rawPassword; // Simulamos que encripta
+        }
+
+        @Override
+        public boolean matches(String rawPassword, String hashedPassword) {
+            return true; // No lo usamos en el registro
+        }
+    }
+
     @Test
     void shouldRegisterNewUserSuccessfully() {
         // Arrange
         FakeUserRepository fakeRepo = new FakeUserRepository();
-        RegisterUserUseCase useCase = new RegisterUserUseCase(fakeRepo);
+        FakePasswordHasher fakeHasher = new FakePasswordHasher(); // Instanciamos el hasher
 
-        // Act
-        User result = useCase.execute("Mariano", "mariano@correo.com");
+        // Pasamos AMBAS dependencias al Caso de Uso
+        RegisterUserUseCase useCase = new RegisterUserUseCase(fakeRepo, fakeHasher);
 
-        // Assert: Verificamos que devuelva el usuario y que el repositorio haya sido llamado
-        assertNotNull(result, "El usuario devuelto no debería ser nulo");
-        assertEquals("Mariano", result.getName());
+        // Act: Ahora pasamos la contraseña como tercer parámetro
+        useCase.execute("Mariano", "mariano@correo.com", "password123");
+
+        // Assert: Verificamos que el repositorio haya sido llamado para guardar
         assertTrue(fakeRepo.wasUserSaved(), "El usuario debió haberse guardado en el repositorio");
     }
 
@@ -58,11 +76,12 @@ class RegisterUserUseCaseTest {
         // Arrange
         FakeUserRepository fakeRepo = new FakeUserRepository();
         fakeRepo.setSimulateEmailExists(true); // Simulamos que el correo ya está en la BD
-        RegisterUserUseCase useCase = new RegisterUserUseCase(fakeRepo);
+        FakePasswordHasher fakeHasher = new FakePasswordHasher();
+        RegisterUserUseCase useCase = new RegisterUserUseCase(fakeRepo, fakeHasher);
 
         // Act & Assert: Verificamos que se lance la excepción correcta
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            useCase.execute("Mariano", "mariano@correo.com");
+            useCase.execute("Mariano", "mariano@correo.com", "password123");
         });
 
         // Verificamos que el mensaje de error sea exacto y que NO se haya intentado guardar

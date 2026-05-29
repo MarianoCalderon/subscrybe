@@ -18,7 +18,7 @@ public class UserRepositoryAdapter implements IUserRepository {
     @Override
     public void save(User user) {
         // Traducimos el User del Dominio al UserJpaEntity de la base de datos
-        UserJpaEntity entity = new UserJpaEntity(user.getName(), user.getEmail());
+        UserJpaEntity entity = new UserJpaEntity(user.getName(), user.getEmail(), user.getPassword());
         jpaRepository.save(entity);
     }
 
@@ -33,7 +33,7 @@ public class UserRepositoryAdapter implements IUserRepository {
         if (entityOptional.isPresent()) {
             UserJpaEntity entity = entityOptional.get();
             // Traducimos de vuelta al Dominio
-            return new User(entity.getName(), entity.getEmail());
+            return new User(entity.getName(), entity.getEmail(), entity.getPassword());
         }
         return null;
     }

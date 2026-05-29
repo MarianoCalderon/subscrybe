@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscrybe · Tablero</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+  </head>
+  <body>
+    <!--
+      CAPA DE PRESENTACIÓN (estructura).
+      El tablero vive en UNA sola pantalla con tres bloques pedidos:
+        1) Análisis financiero (#analysis)
+        2) Próximos pagos (#payments)  ->  cada tarjeta trae su botón de pago
+      Toda la lógica se carga como módulos ES desde main.js (composition root).
+    -->
+    <header class="topbar">
+      <h1>Subscrybe</h1>
+      <p>Tablero de suscripciones · próximos pagos y análisis financiero</p>
+    </header>
+
+    <main class="dashboard">
+      <section class="panel" aria-labelledby="analysis-title">
+        <h2 id="analysis-title">Análisis financiero</h2>
+        <div id="analysis" class="analysis-grid">
+          <!-- Inyectado por DashboardView -->
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="payments-title">
+        <h2 id="payments-title">Próximos pagos</h2>
+        <p id="status" class="status"></p>
+        <div id="payments" class="payments-grid">
+          <!-- Inyectado por DashboardView -->
+        </div>
+      </section>
+
+      <section class="panel panel-wide" aria-labelledby="chart-title">
+        <h2 id="chart-title">Distribución del gasto mensual</h2>
+        <div id="chart" class="chart-wrap">
+          <!-- Gráfica SVG inyectada por DashboardView -->
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small>Datos simulados (mock). El adaptador HTTP real está listo en
+        <code>js/infrastructure/HttpSubscriptionGateway.js</code>.</small>
+    </footer>
+
+    <!-- type="module" habilita import/export ES sin build step -->
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

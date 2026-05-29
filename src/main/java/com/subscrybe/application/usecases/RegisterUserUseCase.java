@@ -1,25 +1,30 @@
 package com.subscrybe.application.usecases;
 
+import com.subscrybe.application.ports.out.IPasswordHasher;
 import com.subscrybe.application.ports.out.IUserRepository;
 import com.subscrybe.domain.entities.User;
 
 public class RegisterUserUseCase {
 
     private final IUserRepository userRepository;
+    private final IPasswordHasher passwordHasher;
 
-    public RegisterUserUseCase(IUserRepository userRepository) {
+    public RegisterUserUseCase(IUserRepository userRepository, IPasswordHasher passwordHasher) {
         this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
     }
 
-    public User execute(String name, String email) {
-        // Regla de negocio: No pueden haber dos cuentas con el mismo correo
-        if (userRepository.existsByEmail(email)) {
+    public void execute(String name, String email, String rawPassword) {
+        if (userRepository.findByEmail(email) != null) {
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
-        User newUser = new User(name, email);
-        userRepository.save(newUser);
+        // Encriptamos la contraseña antes de crear la entidad
+        String hashedPassword = passwordHasher.hash(rawPassword);
 
-        return newUser;
+        // Usamos el nuevo constructor
+        User newUser = new User(name, email, hashedPassword);
+
+        userRepository.save(newUser);
     }
 }

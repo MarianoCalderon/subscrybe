@@ -4,14 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Subscrybe · Tablero</title>
-    <link rel="stylesheet" href="./css/dashboard.css?v=6" />
+    <link rel="stylesheet" href="./css/dashboard.css?v=7" />
   </head>
   <body>
-    <!--
-      PANTALLA DE LOGIN (se muestra primero). Usa los endpoints reales
-      /api/auth/login y /api/users/register. Al entrar, se oculta y se
-      revela #app-root. Lógica en js/presentation/LoginView.js.
-    -->
     <div id="login-overlay" class="login-overlay">
       <form id="login-form" class="login-card" autocomplete="on">
         <h1 class="login-brand">Subscrybe</h1>
@@ -40,13 +35,6 @@
       </form>
     </div>
 
-    <!--
-      CAPA DE PRESENTACIÓN (estructura). Oculto hasta iniciar sesión.
-      El tablero vive en UNA sola pantalla con tres bloques pedidos:
-        1) Análisis financiero (#analysis)
-        2) Próximos pagos (#payments)  ->  cada tarjeta trae su botón de pago
-      Toda la lógica se carga como módulos ES desde main.js (composition root).
-    -->
     <div id="app-root" style="display: none">
     <header class="topbar">
       <div class="topbar-title">
@@ -63,8 +51,6 @@
       </div>
     </header>
 
-    <!-- Barra de acciones: escanear Gmail y agregar suscripción manual.
-         Conecta POST /api/emails/sync y POST /api/subscriptions/add. -->
     <section class="toolbar">
       <button id="scan-btn" class="tool-btn tool-btn-primary" type="button">
         🔍 Escanear mi Gmail
@@ -87,27 +73,19 @@
     <main class="dashboard">
       <section class="panel" aria-labelledby="analysis-title">
         <h2 id="analysis-title">Análisis financiero</h2>
-        <div id="analysis" class="analysis-grid">
-          <!-- Inyectado por DashboardView -->
-        </div>
+        <div id="analysis" class="analysis-grid"></div>
       </section>
 
-      <!-- Columna derecha: Próximos pagos arriba y la gráfica justo debajo
-           (zona verde de la maqueta), apiladas verticalmente. -->
       <div class="main-col">
         <section class="panel" aria-labelledby="payments-title">
           <h2 id="payments-title">Próximos pagos</h2>
           <p id="status" class="status"></p>
-          <div id="payments" class="payments-grid">
-            <!-- Inyectado por DashboardView -->
-          </div>
+          <div id="payments" class="payments-grid"></div>
         </section>
 
         <section class="panel" aria-labelledby="chart-title">
           <h2 id="chart-title">Distribución del gasto mensual</h2>
-          <div id="chart" class="chart-wrap">
-            <!-- Gráfica SVG inyectada por DashboardView -->
-          </div>
+          <div id="chart" class="chart-wrap"></div>
         </section>
       </div>
     </main>
@@ -117,7 +95,6 @@
     </footer>
     </div>
 
-    <!-- type="module" habilita import/export ES sin build step -->
-    <script type="module" src="./js/main.js?v=6"></script>
+    <script type="module" src="./js/main.js?v=7"></script>
   </body>
 </html>

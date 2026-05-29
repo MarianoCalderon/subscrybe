@@ -35,7 +35,6 @@ body {
 .topbar h1 { margin: 0; font-size: 1.6rem; letter-spacing: 0.3px; color: var(--accent); }
 .topbar p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
 
-/* Bloque de sesión (derecha del encabezado) */
 .session { display: flex; align-items: center; gap: 0.75rem; }
 .session-avatar {
   width: 40px;
@@ -67,7 +66,6 @@ body {
 }
 .logout-btn:hover { background: #fef2f2; border-color: var(--error); }
 
-/* Barra de acciones (escanear Gmail + agregar suscripción) */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -120,7 +118,6 @@ body {
   .dashboard { grid-template-columns: 1fr; }
 }
 
-/* Columna derecha (zona verde): Próximos pagos + gráfica apiladas */
 .main-col {
   display: grid;
   gap: 1.5rem;
@@ -134,11 +131,9 @@ body {
   padding: 1.25rem;
   box-shadow: var(--shadow);
 }
-/* La gráfica ocupa todo el ancho debajo de las dos columnas */
 .panel-wide { grid-column: 1 / -1; }
 .panel h2 { margin: 0 0 1rem; font-size: 1.1rem; }
 
-/* Análisis financiero */
 .analysis-grid { display: grid; gap: 0.85rem; }
 .metric {
   display: flex;
@@ -154,7 +149,6 @@ body {
 .metric-value.good { color: var(--good); }
 .metric-value.warn { color: var(--warn); }
 
-/* Próximos pagos */
 .payments-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -219,10 +213,6 @@ body {
 .status { color: var(--muted); font-size: 0.9rem; }
 .status.error { color: var(--error); }
 
-/* Gráfica de barras (SVG)
-   Altura FIJA: el viewBox conserva la proporción, así que fijando la altura
-   la gráfica nunca "crece" de más aunque haya 1 o varias barras. Se centra
-   y permite scroll horizontal solo si hubiera muchas suscripciones. */
 .chart-wrap {
   width: 100%;
   max-height: 240px;
@@ -230,7 +220,6 @@ body {
   display: flex;
   justify-content: center;
 }
-/* El SVG ya trae width/height fijos en píxeles; CSS solo evita desbordes. */
 .bar-chart { max-width: 100%; height: auto; }
 .bar-chart .bar { fill: var(--accent); }
 .bar-chart .bar:hover { fill: #2f4bd6; }
@@ -241,7 +230,6 @@ body {
 .footer { padding: 1rem 2rem 2rem; color: var(--muted); background: #f9fafb; }
 .footer code { color: var(--accent); }
 
-/* ===== Pantalla de Login ================================================ */
 .login-overlay {
   position: fixed;
   inset: 0;

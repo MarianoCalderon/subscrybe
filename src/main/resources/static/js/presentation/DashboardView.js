@@ -1,34 +1,14 @@
-/**
- * CAPA: PRESENTACIÓN (Interface Adapters / UI)
- * --------------------------------------------------------------------------
- * Responsable EXCLUSIVO de pintar el DOM y capturar eventos del usuario.
- * Equivale a un Controller del backend, pero del lado del cliente.
- *
- * CLEAN ARCHITECTURE aplicada aquí:
- *  - SRP: solo renderiza y enlaza eventos. NO calcula reglas de negocio
- *    (eso es del dominio) ni sabe de dónde vienen los datos (eso es del puerto).
- *  - DIP: depende del `DashboardService` (caso de uso) inyectado, no de
- *    adaptadores concretos. Habla "hacia adentro", nunca con fetch/mock.
- *  - Regla del Controlador (README): recibe el evento, delega al caso de uso
- *    y refleja el resultado. Nunca procesa lógica de negocio.
- */
-
 export class DashboardView {
-  /**
-   * @param {import("../application/DashboardService.js").DashboardService} service
-   * @param {Document} doc
-   */
   constructor(service, doc = document) {
     this.service = service;
     this.doc = doc;
   }
 
   async init() {
-    this._bindToolbar(); // botones de Gmail / agregar (se enlazan una sola vez)
+    this._bindToolbar();
     await this.reload();
   }
 
-  /** Carga datos del backend y repinta el tablero. Reutilizable tras cambios. */
   async reload() {
     this._setStatus("Cargando tablero…");
     try {
@@ -42,7 +22,6 @@ export class DashboardView {
     }
   }
 
-  /** Enlaza la barra de acciones: escanear Gmail y agregar suscripción. */
   _bindToolbar() {
     const scanBtn = this.doc.getElementById("scan-btn");
     if (scanBtn) scanBtn.addEventListener("click", () => this._onScan(scanBtn));
@@ -180,11 +159,6 @@ export class DashboardView {
     });
   }
 
-  /**
-   * Gráfica de barras (SVG puro, sin librerías) del gasto mensual por
-   * suscripción. SRP: solo dibuja; los datos ya vienen calculados por el
-   * dominio (monthlyCost) y entregados por el caso de uso.
-   */
   _renderChart(payments) {
     const el = this.doc.getElementById("chart");
     const data = payments.map((p) => ({ name: p.name, value: p.monthlyCost }));
@@ -218,9 +192,6 @@ export class DashboardView {
       })
       .join("");
 
-    // Tamaño FIJO en píxeles (width/height del propio SVG = al viewBox).
-    // Así la gráfica se dibuja a escala 1:1 y nunca se agranda, sin depender
-    // de CSS ni de porcentajes.
     el.innerHTML = `
       <svg class="bar-chart" width="${width}" height="${height}"
            viewBox="0 0 ${width} ${height}" role="img"

@@ -1,25 +1,9 @@
-/**
- * CAPA: PRESENTACIÓN (UI)
- * --------------------------------------------------------------------------
- * Pantalla de inicio de sesión. SRP: solo pinta el formulario, captura los
- * eventos y refleja el resultado. Delega la lógica al HttpAuthGateway.
- *
- * Flujo:
- *  - Si el login es correcto: guarda el JWT en sessionStorage, oculta esta
- *    pantalla, muestra el tablero y avisa con onLogin(email).
- *  - Permite alternar entre "Iniciar sesión" y "Crear cuenta".
- */
 export class LoginView {
-  /**
-   * @param {import("../infrastructure/HttpAuthGateway.js").HttpAuthGateway} auth
-   * @param {(email: string) => void} onLogin  callback al entrar correctamente
-   * @param {Document} doc
-   */
   constructor(auth, onLogin, doc = document) {
     this.auth = auth;
     this.onLogin = onLogin;
     this.doc = doc;
-    this.mode = "login"; // "login" | "register"
+    this.mode = "login";
   }
 
   init() {
@@ -69,11 +53,8 @@ export class LoginView {
     try {
       if (this.mode === "register") {
         await this.auth.register(name, email, password);
-        // Tras registrar, iniciamos sesión automáticamente.
       }
       const token = await this.auth.login(email, password);
-      // Nombre: el escrito al registrarse; si solo inició sesión, usamos la
-      // parte del correo antes de la @ como nombre visible.
       const displayName = name || email.split("@")[0];
       sessionStorage.setItem("subscrybe_token", token);
       sessionStorage.setItem("subscrybe_email", email);

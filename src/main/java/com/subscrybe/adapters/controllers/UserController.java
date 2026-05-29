@@ -1,7 +1,6 @@
 package com.subscrybe.adapters.controllers;
 
 import com.subscrybe.application.usecases.RegisterUserUseCase;
-import com.subscrybe.domain.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +16,15 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestParam String name, @RequestParam String email) {
+    public ResponseEntity<String> register(
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String password) { // 1. Recibimos la contraseña desde la petición HTTP
         try {
-            User newUser = registerUserUseCase.execute(name, email);
-            return ResponseEntity.status(201).body("Usuario " + newUser.getName() + " registrado exitosamente.");
+            // 2. Pasamos los 3 parámetros. Como ahora es void, ya no lo asignamos a una variable
+            registerUserUseCase.execute(name, email, password);
+
+            return ResponseEntity.status(201).body("Usuario " + name + " registrado exitosamente.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {

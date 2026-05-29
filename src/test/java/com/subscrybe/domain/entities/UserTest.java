@@ -8,8 +8,8 @@ class UserTest {
 
     @Test
     void shouldAddSubscriptionAndCalculateTotalMonthlyCost() {
-        // Arrange: Creamos un usuario y un par de suscripciones
-        User user = new User("Mariano", "mariano@correo.com");
+        // Arrange: Creamos un usuario y agregamos una contraseña simulada
+        User user = new User("Mariano", "mariano@correo.com", "password123");
 
         Subscription netflix = new Subscription("Netflix", 250.0, Cycle.MONTHLY, LocalDate.now());
         Subscription spotify = new Subscription("Spotify", 129.0, Cycle.MONTHLY, LocalDate.now());

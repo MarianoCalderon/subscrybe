@@ -1,21 +1,33 @@
 package com.subscrybe.adapters.controllers;
 
 import com.subscrybe.application.usecases.AddSubscriptionUseCase;
+import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
+import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
+import com.subscrybe.domain.entities.Subscription;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/subscriptions")
+@CrossOrigin(origins = "*") // ⚠️ Permite que el equipo de frontend se conecte sin bloqueos de seguridad
 public class SubscriptionController {
 
-    private final AddSubscriptionUseCase useCase;
+    private final AddSubscriptionUseCase addUseCase;
+    private final GetSubscriptionsUseCase getSubscriptionsUseCase;
+    private final DeleteSubscriptionUseCase deleteSubscriptionUseCase;
 
-    // Spring inyectará automáticamente el Caso de Uso aquí gracias a @RestController
-    public SubscriptionController(AddSubscriptionUseCase useCase) {
-        this.useCase = useCase;
+    // Spring inyecta automáticamente los tres Casos de Uso
+    public SubscriptionController(AddSubscriptionUseCase addUseCase,
+                                  GetSubscriptionsUseCase getSubscriptionsUseCase,
+                                  DeleteSubscriptionUseCase deleteSubscriptionUseCase) {
+        this.addUseCase = addUseCase;
+        this.getSubscriptionsUseCase = getSubscriptionsUseCase;
+        this.deleteSubscriptionUseCase = deleteSubscriptionUseCase;
     }
 
-    // Transformamos el método en un endpoint POST real accesible por HTTP
+    // 1. Endpoint para agregar manualmente
     @PostMapping("/add")
     public ResponseEntity<String> addSubscription(
             @RequestParam String name,
@@ -23,16 +35,34 @@ public class SubscriptionController {
             @RequestParam String cycle,
             @RequestParam String startDate) {
         try {
-            // El controlador sigue cumpliendo su única responsabilidad:
-            // recibir datos de la web y delegar la lógica pesada al Caso de Uso
-            useCase.execute(name, cost, cycle, startDate);
+            addUseCase.execute(name, cost, cycle, startDate);
             return ResponseEntity.ok("Suscripción '" + name + "' guardada con éxito.");
         } catch (IllegalArgumentException e) {
-            // Si las reglas de negocio del dominio fallan, atrapamos el error con un 400 Bad Request
             return ResponseEntity.badRequest().body("Error de validación: " + e.getMessage());
         } catch (Exception e) {
-            // Cualquier otro fallo inesperado devuelve un 500 Internal Server Error
             return ResponseEntity.status(500).body("Error interno del servidor");
+        }
+    }
+
+    // 2. Endpoint para ver el tablero
+    @GetMapping
+    public ResponseEntity<List<Subscription>> getUserSubscriptions(@RequestParam String email) {
+        List<Subscription> subscriptions = getSubscriptionsUseCase.execute(email);
+
+        if (subscriptions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(subscriptions);
+    }
+
+    // 3. Endpoint para eliminar
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSubscription(@PathVariable Long id) {
+        try {
+            deleteSubscriptionUseCase.execute(id);
+            return ResponseEntity.ok("Suscripción eliminada con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al eliminar: " + e.getMessage());
         }
     }
 }

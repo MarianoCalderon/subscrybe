@@ -5,7 +5,9 @@ import com.subscrybe.domain.entities.Cycle;
 import com.subscrybe.domain.entities.Subscription;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class SubscriptionRepositoryAdapter implements ISubscriptionRepository {
@@ -18,12 +20,12 @@ public class SubscriptionRepositoryAdapter implements ISubscriptionRepository {
 
     @Override
     public void save(Subscription subscription) {
-        // Traducimos del Dominio a la BD
         SubscriptionJpaEntity entity = new SubscriptionJpaEntity(
                 subscription.getName(),
                 subscription.getCost(),
-                subscription.getBillingCycle().name(), // Pasamos el Enum a String
-                subscription.getStartDate()
+                subscription.getBillingCycle().name(),
+                subscription.getStartDate(),
+                "marianocalderon82@gmail.com" // <-- 1. CORREGIDO AL CORREO REAL
         );
         jpaRepository.save(entity);
     }
@@ -34,16 +36,39 @@ public class SubscriptionRepositoryAdapter implements ISubscriptionRepository {
 
         if (entityOpt.isPresent()) {
             SubscriptionJpaEntity entity = entityOpt.get();
-            // Traducimos de la BD de vuelta al Dominio
-            return new Subscription(
+            Subscription sub = new Subscription(
                     entity.getName(),
                     entity.getCost(),
-                    Cycle.valueOf(entity.getBillingCycle()), // Recuperamos el Enum
+                    Cycle.valueOf(entity.getBillingCycle()),
                     entity.getStartDate()
             );
+            sub.setId(entity.getId()); // También agregamos el ID aquí por si acaso
+            return sub;
         }
-        return null; // Si no existe, retornamos null
+        return null;
     }
 
+    @Override
+    public List<Subscription> findByUserEmail(String email) {
+        List<SubscriptionJpaEntity> entities = jpaRepository.findByUserEmail(email);
 
+        return entities.stream()
+                .map(entity -> {
+                    Subscription sub = new Subscription(
+                            entity.getName(),
+                            entity.getCost(),
+                            Cycle.valueOf(entity.getBillingCycle()),
+                            entity.getStartDate()
+                    );
+                    // 👇 2. EL PASO CLAVE: Pasamos el ID de la BD a tu Dominio
+                    sub.setId(entity.getId());
+                    return sub;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        jpaRepository.deleteById(id);
+    }
 }

@@ -10,6 +10,12 @@ import com.subscrybe.application.usecases.GetSubscriptionsUseCase;
 import com.subscrybe.application.usecases.DeleteSubscriptionUseCase;
 
 import com.subscrybe.infrastructure.adapters.out.email.GmailApiScannerAdapter;
+import com.subscrybe.application.ports.out.IUserRepository;
+import com.subscrybe.application.ports.out.ISubscriptionRepository;
+import com.subscrybe.application.usecases.AddSubscriptionUseCase;
+import com.subscrybe.application.usecases.AnalyzeSubscriptionUseCase;
+import com.subscrybe.application.usecases.RegisterUserUseCase;
+import com.subscrybe.domain.services.FinancialAnalyzer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -57,5 +63,8 @@ public class UseCaseConfig {
             GmailApiScannerAdapter gmailScannerAdapter,
             ISubscriptionRepository repo) {
         return new SyncSubscriptionsFromEmailUseCase(gmailScannerAdapter, repo);
+    @Bean
+    public AnalyzeSubscriptionUseCase analyzeSubscriptionUseCase(ISubscriptionRepository subscriptionRepository) {
+        return new AnalyzeSubscriptionUseCase(subscriptionRepository, new FinancialAnalyzer());
     }
 }

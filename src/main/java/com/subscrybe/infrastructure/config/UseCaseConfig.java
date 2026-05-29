@@ -52,10 +52,7 @@ public class UseCaseConfig {
 
     // --- EL NUEVO AJUSTE: El Bean para el Login ---
     @Bean
-    public LoginUserUseCase loginUserUseCase(
-            IUserRepository userRepository,
-            IPasswordHasher passwordHasher,
-            ITokenGenerator tokenGenerator) {
+    public LoginUserUseCase loginUserUseCase(IUserRepository userRepository, IPasswordHasher passwordHasher, ITokenGenerator tokenGenerator) {
         return new LoginUserUseCase(userRepository, passwordHasher, tokenGenerator);
     }
 
